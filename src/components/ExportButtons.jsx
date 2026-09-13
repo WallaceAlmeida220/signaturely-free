@@ -8,28 +8,28 @@ export default function ExportButtons({ formData, onOpenInstructions }) {
 
   const htmlContent = generateSignatureHTML(formData);
 
-  // Copy rendered HTML as rich text for Gmail/Outlook
+  // Copia o HTML renderizado (Rich Text) diretamente para Gmail/Outlook (Mobile + Desktop)
   const handleCopySignature = async () => {
     try {
-      const previewEl = document.getElementById('signature-preview-content');
-      if (!previewEl) return;
+      // Extrai o texto limpo para o fallback 'text/plain'
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlContent;
+      const plainText = tempDiv.innerText || tempDiv.textContent || '';
 
-      const range = document.createRange();
-      range.selectNode(previewEl);
-      const selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
+      if (navigator.clipboard && window.ClipboardItem) {
+        const clipboardItem = new ClipboardItem({
+          'text/html': new Blob([htmlContent], { type: 'text/html' }),
+          'text/plain': new Blob([plainText], { type: 'text/plain' })
+        });
 
-      const blobInput = new Blob([htmlContent], { type: 'text/html' });
-      const clipboardItem = new ClipboardItem({
-        'text/html': blobInput,
-        'text/plain': new Blob([previewEl.innerText], { type: 'text/plain' })
-      });
-
-      await navigator.clipboard.write([clipboardItem]);
-      setCopiedSig(true);
-      setTimeout(() => setCopiedSig(false), 3000);
+        await navigator.clipboard.write([clipboardItem]);
+        setCopiedSig(true);
+        setTimeout(() => setCopiedSig(false), 3000);
+      } else {
+        throw new Error('ClipboardItem API not supported');
+      }
     } catch (err) {
+      console.warn('Rich text copy failed, falling back to raw text:', err);
       try {
         await navigator.clipboard.writeText(htmlContent);
         setCopiedSig(true);
@@ -40,7 +40,7 @@ export default function ExportButtons({ formData, onOpenInstructions }) {
     }
   };
 
-  // Copy Raw HTML Code
+  // Copia o código HTML bruto
   const handleCopyHTML = async () => {
     try {
       await navigator.clipboard.writeText(htmlContent);
@@ -51,7 +51,7 @@ export default function ExportButtons({ formData, onOpenInstructions }) {
     }
   };
 
-  // Download signature.html
+  // Baixa o arquivo signature.html
   const handleDownloadHTML = () => {
     const element = document.createElement('a');
     const file = new Blob([htmlContent], { type: 'text/html' });
