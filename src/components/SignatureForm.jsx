@@ -1,13 +1,13 @@
 import React from 'react';
 
 export default function SignatureForm({ formData, setFormData }) {
-  // Atualiza qualquer campo de texto dinamicamente
+  // Dynamically update text fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Upload exclusivo para Foto de Perfil
+  // Dedicated upload for Profile Photo
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -19,7 +19,7 @@ export default function SignatureForm({ formData, setFormData }) {
     }
   };
 
-  // Upload exclusivo para Logo da Empresa
+  // Dedicated upload for Company Logo
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -33,13 +33,13 @@ export default function SignatureForm({ formData, setFormData }) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-bold text-slate-800">Informações Pessoais</h2>
+      <h2 className="text-lg font-bold text-slate-800">Personal Details</h2>
       
-      {/* Uploads de Imagens */}
+      {/* Image Uploads */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            Foto de Perfil
+            Profile Photo
           </label>
           <input
             type="file"
@@ -48,13 +48,13 @@ export default function SignatureForm({ formData, setFormData }) {
             className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
           {formData.photoUrl && (
-            <p className="text-xs text-emerald-600 mt-1">✓ Foto de perfil carregada</p>
+            <p className="text-xs text-emerald-600 mt-1">✓ Photo uploaded</p>
           )}
         </div>
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            Logo da Empresa
+            Company Logo
           </label>
           <input
             type="file"
@@ -63,32 +63,32 @@ export default function SignatureForm({ formData, setFormData }) {
             className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
           {formData.logoUrl && (
-            <p className="text-xs text-emerald-600 mt-1">✓ Logo carregada</p>
+            <p className="text-xs text-emerald-600 mt-1">✓ Logo uploaded</p>
           )}
         </div>
       </div>
 
-      {/* Nome Completo */}
+      {/* Full Name */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Nome Completo</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
         <input
           type="text"
           name="fullName"
-          placeholder="Ex: John Smith"
+          placeholder="e.g. John Smith"
           value={formData.fullName || ''}
           onChange={handleChange}
           className="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
         />
       </div>
 
-      {/* Cargo e Empresa */}
+      {/* Job Title & Company */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Cargo / Função</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Job Title</label>
           <input
             type="text"
             name="jobTitle"
-            placeholder="Ex: Marketing Manager"
+            placeholder="e.g. Marketing Manager"
             value={formData.jobTitle || ''}
             onChange={handleChange}
             className="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
@@ -96,11 +96,11 @@ export default function SignatureForm({ formData, setFormData }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Empresa</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Company</label>
           <input
             type="text"
             name="company"
-            placeholder="Ex: Acme Inc."
+            placeholder="e.g. Acme Inc."
             value={formData.company || ''}
             onChange={handleChange}
             className="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
@@ -108,10 +108,10 @@ export default function SignatureForm({ formData, setFormData }) {
         </div>
       </div>
 
-      {/* Email e Telefone */}
+      {/* Email & Phone */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">E-mail</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
           <input
             type="email"
             name="email"
@@ -123,11 +123,11 @@ export default function SignatureForm({ formData, setFormData }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Telefone</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Phone</label>
           <input
             type="text"
             name="phone"
-            placeholder="+55 (19) 99999-9999"
+            placeholder="+1 555 123 4567"
             value={formData.phone || ''}
             onChange={handleChange}
             className="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
