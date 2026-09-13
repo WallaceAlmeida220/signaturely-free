@@ -1,13 +1,18 @@
 import React from 'react';
 
 export default function SignatureForm({ formData, setFormData }) {
-  // Dynamically update text fields
+  // Atualiza qualquer campo de texto dinamicamente
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Dedicated upload for Profile Photo
+  // Selecionar o template (Classic, Modern, Minimal, Compact, etc.)
+  const handleTemplateChange = (template) => {
+    setFormData((prev) => ({ ...prev, template }));
+  };
+
+  // Upload exclusivo para Foto de Perfil
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -19,7 +24,7 @@ export default function SignatureForm({ formData, setFormData }) {
     }
   };
 
-  // Dedicated upload for Company Logo
+  // Upload exclusivo para Logo da Empresa
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -31,8 +36,38 @@ export default function SignatureForm({ formData, setFormData }) {
     }
   };
 
+  const templates = [
+    { id: 'classic', name: 'Classic' },
+    { id: 'modern', name: 'Modern' },
+    { id: 'minimal', name: 'Minimal' },
+    { id: 'compact', name: 'Compact' }
+  ];
+
   return (
     <div className="space-y-6">
+      {/* Template Selector */}
+      <div>
+        <h2 className="text-lg font-bold text-slate-800 mb-3">Choose Template</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {templates.map((tmpl) => (
+            <button
+              key={tmpl.id}
+              type="button"
+              onClick={() => handleTemplateChange(tmpl.id)}
+              className={`py-2 px-3 text-sm font-medium rounded-lg border transition-all ${
+                (formData.template || 'classic') === tmpl.id
+                  ? 'border-blue-600 bg-blue-50 text-blue-700 font-semibold'
+                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+              }`}
+            >
+              {tmpl.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <hr className="border-slate-200" />
+
       {/* Personal Details */}
       <div className="space-y-4">
         <h2 className="text-lg font-bold text-slate-800">Personal Details</h2>
