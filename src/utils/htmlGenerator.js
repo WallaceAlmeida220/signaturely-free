@@ -21,13 +21,17 @@ export const generateSignatureHTML = (data) => {
   const formattedWebUrl = website ? (website.startsWith('http') ? website : `https://${website}`) : '';
   const cleanWebDisplay = website ? website.replace(/^https?:\/\//, '') : '';
 
+  // Tratamento de segurança para URLs de Imagens (evita bloqueio HTTP no mobile)
+  const cleanPhotoUrl = photoUrl ? photoUrl.trim().replace(/^http:\/\//i, 'https://') : '';
+  const cleanLogoUrl = logoUrl ? logoUrl.trim().replace(/^http:\/\//i, 'https://') : '';
+
   // Filter active social links
-  const activeSocials = Object.entries(socials)
-    .filter(([_, item]) => item.enabled && item.url.trim() !== '')
+  const activeSocials = socials ? Object.entries(socials)
+    .filter(([_, item]) => item && item.enabled && item.url && item.url.trim() !== '')
     .map(([platform, item]) => ({
       platform,
       url: item.url.startsWith('http') ? item.url : `https://${item.url}`
-    }));
+    })) : [];
 
   const socialIconsMap = {
     linkedin: 'https://cdn-icons-png.flaticon.com/24/3536/3536505.png',
@@ -45,7 +49,7 @@ export const generateSignatureHTML = (data) => {
             ${activeSocials.map(s => `
               <td style="padding-right: 8px;">
                 <a href="${s.url}" target="_blank" style="text-decoration: none;">
-                  <img src="${socialIconsMap[s.platform]}" alt="${s.platform}" width="18" height="18" style="display: block; border: 0;" />
+                  <img src="${socialIconsMap[s.platform]}" alt="${s.platform}" width="18" height="18" style="display: block; width: 18px; height: 18px; border: 0; outline: none;" />
                 </a>
               </td>
             `).join('')}
@@ -54,6 +58,39 @@ export const generateSignatureHTML = (data) => {
       </td>
     </tr>
   ` : '';
+
+  // Helper para renderizar a Foto com proteção contra achatamento/sumiço no celular
+  const renderPhoto = (size = 80, borderRadius = '8px') => {
+    if (!cleanPhotoUrl) return '';
+    return `
+      <td valign="top" style="width: ${size}px; min-width: ${size}px; padding-right: 14px;">
+        <img 
+          src="${cleanPhotoUrl}" 
+          alt="${fullName || 'Profile'}" 
+          width="${size}" 
+          height="${size}" 
+          style="display: block; width: ${size}px; height: ${size}px; max-width: ${size}px; min-width: ${size}px; border-radius: ${borderRadius}; object-fit: cover; border: 0; outline: none; text-decoration: none;" 
+        />
+      </td>
+    `;
+  };
+
+  // Helper para renderizar a Logo
+  const renderLogo = (height = 30) => {
+    if (!cleanLogoUrl) return '';
+    return `
+      <tr>
+        <td style="padding-top: 10px;">
+          <img 
+            src="${cleanLogoUrl}" 
+            alt="${company || 'Logo'}" 
+            height="${height}" 
+            style="display: block; height: ${height}px; width: auto; max-height: ${height}px; border: 0; outline: none;" 
+          />
+        </td>
+      </tr>
+    `;
+  };
 
   // Render Template Variations using pure <table> structures
   if (template === 'minimal') {
@@ -83,11 +120,7 @@ export const generateSignatureHTML = (data) => {
     return `
 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="font-family: ${fontStack}; font-size: 13px; color: ${textColor}; line-height: 1.3;">
   <tr>
-    ${photoUrl ? `
-      <td valign="top" style="padding-right: 12px;">
-        <img src="${photoUrl}" alt="${fullName}" width="50" height="50" style="display: block; border-radius: 50%; object-fit: cover; width: 50px; height: 50px;" />
-      </td>
-    ` : ''}
+    ${renderPhoto(50, '50%')}
     <td valign="top">
       <div style="font-weight: bold; font-size: 15px; color: ${primaryColor};">${fullName || 'John Smith'}</div>
       <div style="color: ${textColor}; font-size: 12px; margin-bottom: 4px;">${jobTitle || 'Marketing Manager'}${company ? ` at ${company}` : ''}</div>
@@ -120,13 +153,7 @@ export const generateSignatureHTML = (data) => {
       </table>
     </td>
   </tr>
-  ${logoUrl ? `
-  <tr>
-    <td style="padding-top: 10px;">
-      <img src="${logoUrl}" alt="${company}" height="32" style="display: block; height: 32px; width: auto;" />
-    </td>
-  </tr>
-  ` : ''}
+  ${renderLogo(32)}
   ${socialRowHTML}
 </table>`.trim();
   }
@@ -135,11 +162,7 @@ export const generateSignatureHTML = (data) => {
     return `
 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="font-family: ${fontStack}; font-size: 14px; color: ${textColor}; line-height: 1.4; border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; background-color: #ffffff;">
   <tr>
-    ${photoUrl ? `
-      <td valign="top" style="padding-right: 14px;">
-        <img src="${photoUrl}" alt="${fullName}" width="65" height="65" style="display: block; border-radius: 4px; object-fit: cover; width: 65px; height: 65px;" />
-      </td>
-    ` : ''}
+    ${renderPhoto(65, '4px')}
     <td valign="top">
       <table border="0" cellpadding="0" cellspacing="0" role="presentation">
         <tr>
@@ -167,11 +190,7 @@ export const generateSignatureHTML = (data) => {
     return `
 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="font-family: ${fontStack}; font-size: 14px; color: ${textColor}; line-height: 1.4;">
   <tr>
-    ${photoUrl ? `
-      <td valign="top" style="padding-right: 16px;">
-        <img src="${photoUrl}" alt="${fullName}" width="70" height="70" style="display: block; border-radius: 50%; object-fit: cover; width: 70px; height: 70px;" />
-      </td>
-    ` : ''}
+    ${renderPhoto(70, '50%')}
     <td valign="top" style="border-left: 3px solid ${primaryColor}; padding-left: 14px;">
       <table border="0" cellpadding="0" cellspacing="0" role="presentation">
         <tr>
@@ -187,13 +206,7 @@ export const generateSignatureHTML = (data) => {
             ${website ? `<div style="margin-bottom: 2px;"><a href="${formattedWebUrl}" target="_blank" style="color: ${linkColor}; text-decoration: none;">${cleanWebDisplay}</a></div>` : ''}
           </td>
         </tr>
-        ${logoUrl ? `
-        <tr>
-          <td style="padding-top: 8px;">
-            <img src="${logoUrl}" alt="${company}" height="28" style="display: block; height: 28px; width: auto;" />
-          </td>
-        </tr>
-        ` : ''}
+        ${renderLogo(28)}
         ${socialRowHTML}
       </table>
     </td>
@@ -205,11 +218,7 @@ export const generateSignatureHTML = (data) => {
   return `
 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="font-family: ${fontStack}; font-size: 14px; color: ${textColor}; line-height: 1.4;">
   <tr>
-    ${photoUrl ? `
-      <td valign="top" style="padding-right: 16px;">
-        <img src="${photoUrl}" alt="${fullName}" width="80" height="80" style="display: block; border-radius: 8px; object-fit: cover; width: 80px; height: 80px;" />
-      </td>
-    ` : ''}
+    ${renderPhoto(80, '8px')}
     <td valign="top">
       <table border="0" cellpadding="0" cellspacing="0" role="presentation">
         <tr>
@@ -226,13 +235,7 @@ export const generateSignatureHTML = (data) => {
             ${website ? `<div>Web: <a href="${formattedWebUrl}" target="_blank" style="color: ${linkColor}; text-decoration: none;">${cleanWebDisplay}</a></div>` : ''}
           </td>
         </tr>
-        ${logoUrl ? `
-        <tr>
-          <td style="padding-top: 10px;">
-            <img src="${logoUrl}" alt="${company}" height="30" style="display: block; height: 30px; width: auto;" />
-          </td>
-        </tr>
-        ` : ''}
+        ${renderLogo(30)}
         ${socialRowHTML}
       </table>
     </td>
