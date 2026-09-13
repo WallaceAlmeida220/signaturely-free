@@ -17,7 +17,7 @@ export default function Home({ formData, setFormData, onOpenInstructions }) {
       <section className="py-16 md:py-20 bg-slate-50 border-b border-slate-200 text-center">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">
-            Create a professional email signature in second
+            Create a professional email signature in seconds
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
             Design your email signature for Gmail, Outlook, Apple Mail and more. No signup required.
@@ -54,7 +54,7 @@ export default function Home({ formData, setFormData, onOpenInstructions }) {
               {/* RIGHT: Live Preview */}
               <div className="lg:col-span-5 space-y-6 lg:border-l lg:border-slate-200 lg:pl-8 flex flex-col justify-between">
                 <div>
-                  <SignaturePreview formData={formData} />
+                  <SignaturePreview data={formData} />
                 </div>
                 <div>
                   <ExportButtons formData={formData} onOpenInstructions={onOpenInstructions} />

@@ -1,6 +1,9 @@
 import React from 'react';
 
-export const SignaturePreview = ({ data }) => {
+export const SignaturePreview = ({ data, formData }) => {
+  // Garante compatibilidade tanto se passar data quanto formData
+  const inputData = data || formData || {};
+
   // Valores padrão para evitar campos vazios no preview
   const {
     fullName = "Wallace Almeida",
@@ -12,7 +15,7 @@ export const SignaturePreview = ({ data }) => {
     avatarUrl = "https://via.placeholder.com/100",
     linkedin = "#",
     instagram = "#"
-  } = data || {};
+  } = inputData;
 
   return (
     <div id="signature-preview" style={{ background: '#ffffff', padding: '10px' }}>
@@ -143,7 +146,7 @@ export const SignaturePreview = ({ data }) => {
                     </tr>
                   )}
 
-                  {/* Ícones de Redes Sociais em PNG (Substitui os ícones com erro [OBJ]) */}
+                  {/* Ícones de Redes Sociais */}
                   <tr>
                     <td style={{ paddingTop: '6px' }}>
                       <table cellPadding="0" cellSpacing="0" border="0" style={{ borderCollapse: 'collapse' }}>
@@ -190,3 +193,6 @@ export const SignaturePreview = ({ data }) => {
     </div>
   );
 };
+
+// Export padrão adicionado para resolver o erro de build da Vercel
+export default SignaturePreview;
