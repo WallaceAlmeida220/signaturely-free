@@ -5,7 +5,7 @@ export function generateSignatureHTML(data = {}) {
   const email = data.email || 'john@acme.com';
   const phone = data.phone || '+1 555 123 4567';
   const website = data.website || 'acme.com';
-  const photoUrl = data.photoUrl || data.avatarUrl || 'https://via.placeholder.com/80';
+  const photoUrl = data.photoUrl || data.avatarUrl || 'https://placehold.co/80x80';
   const logoUrl = data.logoUrl || '';
 
   const linkedin = data.linkedin || '';

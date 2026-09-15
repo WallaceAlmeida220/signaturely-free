@@ -1,0 +1,15 @@
+export const EVENT_NAMES = {
+  PAGE_VIEW: 'page_view',
+  SESSION_STARTED: 'session_started',
+  SIGN_UP_STARTED: 'sign_up_started',
+  SIGN_UP_COMPLETED: 'sign_up_completed',
+  LOGIN: 'login',
+  SEARCH_STARTED: 'search_started',
+  PROSPECTS_FOUND: 'prospects_found',
+  PROSPECT_VIEWED: 'prospect_viewed',
+  PROSPECT_ANALYZED: 'prospect_analyzed',
+  CAMPAIGN_CREATED: 'campaign_created',
+  EMAIL_GENERATED: 'email_generated',
+  TEMPLATE_CREATED: 'template_created',
+  CTA_CLICKED: 'cta_start_clicked',
+};
